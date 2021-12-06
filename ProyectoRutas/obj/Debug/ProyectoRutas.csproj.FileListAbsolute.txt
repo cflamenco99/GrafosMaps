@@ -1,9 +1,0 @@
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\bin\Debug\ProyectoRutas.exe.config
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\bin\Debug\ProyectoRutas.exe
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\bin\Debug\ProyectoRutas.pdb
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\obj\Debug\ProyectoRutas.csproj.AssemblyReference.cache
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\obj\Debug\ProyectoRutas.Properties.Resources.resources
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\obj\Debug\ProyectoRutas.csproj.GenerateResource.cache
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\obj\Debug\ProyectoRutas.csproj.CoreCompileInputs.cache
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\obj\Debug\ProyectoRutas.exe
-C:\Users\cflam\OneDrive\Documentos\Universidad\Estructura de datos\ProyectoFinal\ProyectoRutas\ProyectoRutas\obj\Debug\ProyectoRutas.pdb
