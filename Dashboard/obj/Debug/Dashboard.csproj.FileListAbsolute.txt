@@ -58,3 +58,6 @@ C:\Users\cflam\OneDrive\Documentos\GitHub\GrafosMaps\Dashboard\obj\Debug\Dashboa
 C:\Users\cflam\OneDrive\Documentos\GitHub\GrafosMaps\Dashboard\obj\Debug\Dashboard.csproj.CoreCompileInputs.cache
 C:\Users\cflam\OneDrive\Documentos\GitHub\GrafosMaps\Dashboard\obj\Debug\Dashboard.exe
 C:\Users\cflam\OneDrive\Documentos\GitHub\GrafosMaps\Dashboard\obj\Debug\Dashboard.pdb
+C:\Users\cflam\OneDrive\Documentos\GitHub\GrafosMaps\Dashboard\bin\Debug\GMap.NET.Core.dll
+C:\Users\cflam\OneDrive\Documentos\GitHub\GrafosMaps\Dashboard\bin\Debug\GMap.NET.WindowsForms.dll
+C:\Users\cflam\OneDrive\Documentos\GitHub\GrafosMaps\Dashboard\obj\Debug\Dashboard.csproj.CopyComplete
