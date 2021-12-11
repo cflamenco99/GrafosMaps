@@ -8,6 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using GMap.NET;
+using GMap.NET.MapProviders;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 
 namespace Dashboard
 {
@@ -16,6 +20,14 @@ namespace Dashboard
         #region Metodos Generales
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);
+
+        GMarkerGoogle marker;
+        GMapOverlay markerOverlay;
+        PointLatLng inicio;
+        PointLatLng final;
+        double LatInicial = 15.489376;
+        double LngInicial = -87.993609;
+
         public Form1()
         {
             InitializeComponent();
@@ -54,7 +66,27 @@ namespace Dashboard
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Creando las dimensiones del GMAPCONTROL(herramienta)
+            gMapControl1.DragButton = MouseButtons.Left;
+            gMapControl1.CanDragMap = true;
+            gMapControl1.MapProvider = GMapProviders.GoogleMap;
+            gMapControl1.Position = new PointLatLng(LatInicial, LngInicial);
+            gMapControl1.MinZoom = 0;
+            gMapControl1.MaxZoom = 24;
+            gMapControl1.Zoom = 9;
+            gMapControl1.AutoScroll = true;
 
+            //Marcador
+            markerOverlay = new GMapOverlay("Marcador");
+            marker = new GMarkerGoogle(new PointLatLng(LatInicial, LngInicial), GMarkerGoogleType.blue);
+            markerOverlay.Markers.Add(marker);//Agregamos al mapa
+
+            //agregamos un tooltip de texto a los marcadores
+            marker.ToolTipMode = MarkerTooltipMode.Always;
+            marker.ToolTipText = string.Format("Ubicación:\n Latitud:{0}\n Longitud:{1}", LatInicial, LngInicial);
+
+            //ahora agregamos el mapa y el marcador al control map
+            gMapControl1.Overlays.Add(markerOverlay);
         }
         private void btnDashbord_Click(object sender, EventArgs e)
         {
@@ -72,6 +104,10 @@ namespace Dashboard
             Application.Exit();
         }     
         private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        private void gMapControl1_Load(object sender, EventArgs e)
         {
 
         }
