@@ -36,33 +36,6 @@ namespace Dashboard
             pnlNav.Top = btnMapas.Top;
             pnlNav.Left = btnMapas.Left;
             btnMapas.BackColor = Color.FromArgb(46, 51, 73);
-
-            //Ejemplo de uso de algoritmo
-            Node NodeA = new Node() { City = "A" };
-            Node NodeB = new Node() { City = "B" };
-            Node NodeC = new Node() { City = "C" };
-            Node NodeD = new Node() { City = "D" };
-
-            NodeA.Ways.Add(new Way() { Node = NodeB, Distance = 5 });
-            NodeA.Ways.Add(new Way() { Node = NodeC, Distance = 15 });
-            NodeA.Ways.Add(new Way() { Node = NodeD, Distance = 7 });
-            NodeB.Ways.Add(new Way() { Node = NodeA, Distance = 5 });
-            NodeB.Ways.Add(new Way() { Node = NodeC, Distance = 10 });
-            NodeB.Ways.Add(new Way() { Node = NodeD, Distance = 5 });
-            NodeC.Ways.Add(new Way() { Node = NodeA, Distance = 15 });
-            NodeC.Ways.Add(new Way() { Node = NodeB, Distance = 10 });
-            NodeC.Ways.Add(new Way() { Node = NodeD, Distance = 3 });
-            NodeD.Ways.Add(new Way() { Node = NodeA, Distance = 7 });
-            NodeD.Ways.Add(new Way() { Node = NodeB, Distance = 5 });
-            NodeD.Ways.Add(new Way() { Node = NodeC, Distance = 3 });
-
-            List<Node> graph = new List<Node>() {
-                NodeA, NodeB, NodeC, NodeD
-            };
-
-            var algorithm = new Algorithm(graph, 3, NodeA);
-            algorithm.Run();
-            MessageBox.Show(algorithm.GetAllRoutes);
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -108,6 +81,47 @@ namespace Dashboard
 
         }
         private void gMapControl1_Load(object sender, EventArgs e)
+        {
+
+        }
+        private void btnMejorRuta_Click(object sender, EventArgs e)
+        {
+            //Ejemplo de uso de algoritmo
+            Node NodeA = new Node() { City = "A" };
+            Node NodeB = new Node() { City = "B" };
+            Node NodeC = new Node() { City = "C" };
+            Node NodeD = new Node() { City = "D" };
+
+            NodeA.Ways.Add(new Way() { Node = NodeB, Distance = 5 });
+            NodeA.Ways.Add(new Way() { Node = NodeC, Distance = 15 });
+            NodeA.Ways.Add(new Way() { Node = NodeD, Distance = 7 });
+            NodeB.Ways.Add(new Way() { Node = NodeA, Distance = 5 });
+            NodeB.Ways.Add(new Way() { Node = NodeC, Distance = 10 });
+            NodeB.Ways.Add(new Way() { Node = NodeD, Distance = 5 });
+            NodeC.Ways.Add(new Way() { Node = NodeA, Distance = 15 });
+            NodeC.Ways.Add(new Way() { Node = NodeB, Distance = 10 });
+            NodeC.Ways.Add(new Way() { Node = NodeD, Distance = 3 });
+            NodeD.Ways.Add(new Way() { Node = NodeA, Distance = 7 });
+            NodeD.Ways.Add(new Way() { Node = NodeB, Distance = 5 });
+            NodeD.Ways.Add(new Way() { Node = NodeC, Distance = 3 });
+
+            List<Node> graph = new List<Node>() {
+                NodeA, NodeB, NodeC, NodeD
+            };
+
+            var algorithm = new Algorithm(graph, 3, NodeA);
+            algorithm.Run();
+            MessageBox.Show(algorithm.GetAllRoutes);
+        }
+        private void btnAgregarCiudad_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btnTrazarRuta_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btnMejorRuta_Click_1(object sender, EventArgs e)
         {
 
         }
@@ -215,6 +229,9 @@ namespace Dashboard
                 TotalDistance = 0;
             }
         }
+
         #endregion
+
+        
     }
 }
