@@ -32,10 +32,10 @@ namespace Dashboard
         {
             InitializeComponent();
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
-            pnlNav.Height = btnDashbord.Height;
-            pnlNav.Top = btnDashbord.Top;
-            pnlNav.Left = btnDashbord.Left;
-            btnDashbord.BackColor = Color.FromArgb(46, 51, 73);
+            pnlNav.Height = btnMapas.Height;
+            pnlNav.Top = btnMapas.Top;
+            pnlNav.Left = btnMapas.Left;
+            btnMapas.BackColor = Color.FromArgb(46, 51, 73);
 
             //Ejemplo de uso de algoritmo
             Node NodeA = new Node() { City = "A" };
@@ -90,14 +90,14 @@ namespace Dashboard
         }
         private void btnDashbord_Click(object sender, EventArgs e)
         {
-            pnlNav.Height = btnDashbord.Height;
-            pnlNav.Top = btnDashbord.Top;
-            pnlNav.Left = btnDashbord.Left;
-            btnDashbord.BackColor = Color.FromArgb(46, 51, 73);
+            pnlNav.Height = btnMapas.Height;
+            pnlNav.Top = btnMapas.Top;
+            pnlNav.Left = btnMapas.Left;
+            btnMapas.BackColor = Color.FromArgb(46, 51, 73);
         }
         private void btnDashbord_Leave(object sender, EventArgs e)
         {
-            btnDashbord.BackColor = Color.FromArgb(24, 30, 54);
+            btnMapas.BackColor = Color.FromArgb(24, 30, 54);
         }
         private void button1_Click_1(object sender, EventArgs e)
         {

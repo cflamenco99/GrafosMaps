@@ -34,7 +34,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btnDashbord = new System.Windows.Forms.Button();
+            this.btnMapas = new System.Windows.Forms.Button();
             this.pnlNav = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -114,23 +114,23 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // btnDashbord
+            // btnMapas
             // 
-            this.btnDashbord.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnDashbord.FlatAppearance.BorderSize = 0;
-            this.btnDashbord.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDashbord.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDashbord.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.btnDashbord.Image = global::Dashboard.Properties.Resources.home;
-            this.btnDashbord.Location = new System.Drawing.Point(0, 154);
-            this.btnDashbord.Name = "btnDashbord";
-            this.btnDashbord.Size = new System.Drawing.Size(186, 42);
-            this.btnDashbord.TabIndex = 1;
-            this.btnDashbord.Text = "Dashboard";
-            this.btnDashbord.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnDashbord.UseVisualStyleBackColor = true;
-            this.btnDashbord.Click += new System.EventHandler(this.btnDashbord_Click);
-            this.btnDashbord.Leave += new System.EventHandler(this.btnDashbord_Leave);
+            this.btnMapas.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMapas.FlatAppearance.BorderSize = 0;
+            this.btnMapas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMapas.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMapas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.btnMapas.Image = global::Dashboard.Properties.Resources.home;
+            this.btnMapas.Location = new System.Drawing.Point(0, 154);
+            this.btnMapas.Name = "btnMapas";
+            this.btnMapas.Size = new System.Drawing.Size(186, 42);
+            this.btnMapas.TabIndex = 1;
+            this.btnMapas.Text = "Inicio";
+            this.btnMapas.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnMapas.UseVisualStyleBackColor = true;
+            this.btnMapas.Click += new System.EventHandler(this.btnDashbord_Click);
+            this.btnMapas.Leave += new System.EventHandler(this.btnDashbord_Leave);
             // 
             // pnlNav
             // 
@@ -144,7 +144,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.panel1.Controls.Add(this.pnlNav);
-            this.panel1.Controls.Add(this.btnDashbord);
+            this.panel1.Controls.Add(this.btnMapas);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -221,7 +221,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button btnDashbord;
+        private System.Windows.Forms.Button btnMapas;
         private System.Windows.Forms.Panel pnlNav;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel4;
