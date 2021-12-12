@@ -125,6 +125,10 @@ namespace Dashboard
         {
 
         }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region Algoritmo Grafos Maps
@@ -230,8 +234,8 @@ namespace Dashboard
             }
         }
 
-        #endregion
 
+        #endregion
         
     }
 }
