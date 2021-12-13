@@ -84,32 +84,7 @@ namespace Dashboard
         }
         private void btnMejorRuta_Click(object sender, EventArgs e)
         {
-            //Ejemplo de uso de algoritmo
-            Node NodeA = new Node() { City = "A" };
-            Node NodeB = new Node() { City = "B" };
-            Node NodeC = new Node() { City = "C" };
-            Node NodeD = new Node() { City = "D" };
-
-            NodeA.Ways.Add(new Way() { Node = NodeB, Distance = 5 });
-            NodeA.Ways.Add(new Way() { Node = NodeC, Distance = 15 });
-            NodeA.Ways.Add(new Way() { Node = NodeD, Distance = 7 });
-            NodeB.Ways.Add(new Way() { Node = NodeA, Distance = 5 });
-            NodeB.Ways.Add(new Way() { Node = NodeC, Distance = 10 });
-            NodeB.Ways.Add(new Way() { Node = NodeD, Distance = 5 });
-            NodeC.Ways.Add(new Way() { Node = NodeA, Distance = 15 });
-            NodeC.Ways.Add(new Way() { Node = NodeB, Distance = 10 });
-            NodeC.Ways.Add(new Way() { Node = NodeD, Distance = 3 });
-            NodeD.Ways.Add(new Way() { Node = NodeA, Distance = 7 });
-            NodeD.Ways.Add(new Way() { Node = NodeB, Distance = 5 });
-            NodeD.Ways.Add(new Way() { Node = NodeC, Distance = 3 });
-
-            List<Node> graph = new List<Node>() {
-                NodeA, NodeB, NodeC, NodeD
-            };
-
-            var algorithm = new Algorithm(graph, 3, NodeA);
-            algorithm.Run();
-            MessageBox.Show(algorithm.GetAllRoutes);
+            
         }
         private void btnAgregarCiudad_Click(object sender, EventArgs e)
         {
@@ -121,7 +96,32 @@ namespace Dashboard
         }
         private void btnMejorRuta_Click_1(object sender, EventArgs e)
         {
+            //Ejemplo de uso de algoritmo
+            Nodo NodoA = new Nodo() { Ciudad = "A" };
+            Nodo NodoB = new Nodo() { Ciudad = "B" };
+            Nodo NodoC = new Nodo() { Ciudad = "C" };
+            Nodo NodoD = new Nodo() { Ciudad = "D" };
 
+            NodoA.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 5 });
+            NodoA.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 15 });
+            NodoA.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 7 });
+            NodoB.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 5 });
+            NodoB.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 10 });
+            NodoB.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 5 });
+            NodoC.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 15 });
+            NodoC.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 10 });
+            NodoC.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 3 });
+            NodoD.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 7 });
+            NodoD.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 5 });
+            NodoD.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 3 });
+
+            List<Nodo> grafo = new List<Nodo>() {
+                NodoA, NodoB, NodoC, NodoD
+            };
+
+            var Algoritmo = new Algoritmo(grafo, 3, NodoA);
+            Algoritmo.Ejecutar();
+            MessageBox.Show(Algoritmo.GetAllRutas);
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -130,105 +130,105 @@ namespace Dashboard
         #endregion
 
         #region Algoritmo Grafos Maps - Metaheurística
-        public class Algorithm
+        public class Algoritmo
         {
-            private List<Node> _graph { get; set; }
+            private List<Nodo> _grafo { get; set; }
             private int _n { get; set; }
-            private Node _origin { get; set; }
-            private List<Route> _solutions { get; set; }
+            private Nodo _origen { get; set; }
+            private List<Ruta> _soluciones { get; set; }
 
-            public string GetAllRoutes
+            public string GetAllRutas
             {
                 get
                 {
                     string result = "";
-                    foreach (var route in _solutions)
+                    foreach (var Ruta in _soluciones)
                     {
-                        foreach (var node in route.Nodes)
+                        foreach (var Nodo in Ruta.Nodos)
                         {
-                            result += node.City + ", ";
+                            result += Nodo.Ciudad + ", ";
                         }
-                        result += " " + route.TotalDistance + "\n";
+                        result += " " + Ruta.TotalDistancia + "\n";
                     }
 
                     return result;
                 }
             }
 
-            public Algorithm(List<Node> graph, int n, Node origin)
+            public Algoritmo(List<Nodo> grafo, int n, Nodo origin)
             {
-                _graph = graph;
+                _grafo = grafo;
                 _n = n;
-                _origin = origin;
+                _origen = origin;
             }
 
-            public void Run()
+            public void Ejecutar()
             {
-                _solutions = new List<Route>();
+                _soluciones = new List<Ruta>();
                 for (int i = 0; i < _n; i++)
                 {
-                    _solutions.Add(Generate());
+                    _soluciones.Add(GenerarRuta());
                 }
-                _solutions = _solutions.OrderBy(d => d.TotalDistance).ToList();
+                _soluciones = _soluciones.OrderBy(d => d.TotalDistancia).ToList();
             }
 
-            public Route Generate()
+            public Ruta GenerarRuta()
             {
-                var solution = new Route();
-                solution.Nodes.Add(_origin);
-                Node current = _origin;
-                for (int i = 0; i < _graph.Count - 1; i++)
+                var solution = new Ruta();
+                solution.Nodos.Add(_origen);
+                Nodo current = _origen;
+                for (int i = 0; i < _grafo.Count - 1; i++)
                 {
-                    Node next = null;
+                    Nodo next = null;
                     do
                     {
-                        next = NextNode(current);
-                    } while (solution.Nodes.Contains(next));
+                        next = NextNodo(current);
+                    } while (solution.Nodos.Contains(next));
 
-                    solution.Nodes.Add(next);
-                    solution.TotalDistance += current.Ways.Where(d => d.Node.City == next.City).First().Distance;
+                    solution.Nodos.Add(next);
+                    solution.TotalDistancia += current.Caminos.Where(d => d.Nodo.Ciudad == next.Ciudad).First().Distancia;
 
                     current = next;
                 }
 
-                solution.Nodes.Add(_origin);
-                solution.TotalDistance += current.Ways.Where(d => d.Node.City == _origin.City).First().Distance;
+                solution.Nodos.Add(_origen);
+                solution.TotalDistancia += current.Caminos.Where(d => d.Nodo.Ciudad == _origen.Ciudad).First().Distancia;
                 return solution;
             }
 
-            private Node NextNode(Node current)
+            private Nodo NextNodo(Nodo current)
             {
-                int nextNode = new Random().Next(0, _graph.Count - 1);
-                return current.Ways[nextNode].Node;
+                int nextNodo = new Random().Next(0, _grafo.Count - 1);
+                return current.Caminos[nextNodo].Nodo;
             }
         }
 
-        public class Node
+        public class Nodo
         {
-            public string City { get; set; }
-            public List<Way> Ways { get; set; }
+            public string Ciudad { get; set; }
+            public List<Camino> Caminos { get; set; }
 
-            public Node()
+            public Nodo()
             {
-                Ways = new List<Way>();
+                Caminos = new List<Camino>();
             }
         }
 
-        public struct Way
+        public struct Camino
         {
-            public Node Node { get; set; }
-            public int Distance { get; set; }
+            public Nodo Nodo { get; set; }
+            public int Distancia { get; set; }
         }
 
-        public class Route
+        public class Ruta
         {
-            public List<Node> Nodes { get; set; }
-            public int TotalDistance { get; set; }
+            public List<Nodo> Nodos { get; set; }
+            public int TotalDistancia { get; set; }
 
-            public Route()
+            public Ruta()
             {
-                Nodes = new List<Node>();
-                TotalDistance = 0;
+                Nodos = new List<Nodo>();
+                TotalDistancia = 0;
             }
         }
 

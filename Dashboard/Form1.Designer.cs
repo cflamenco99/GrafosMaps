@@ -57,6 +57,8 @@
             this.cmbCiudadOrigenRutas = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtCoordenadasCiudad = new System.Windows.Forms.TextBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -274,20 +276,22 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.txtCoordenadasCiudad);
             this.groupBox2.Controls.Add(this.btnAgregarCiudad);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.txtNombreCiudad);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox2.Location = new System.Drawing.Point(203, 642);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(229, 99);
+            this.groupBox2.Size = new System.Drawing.Size(403, 99);
             this.groupBox2.TabIndex = 43;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Mantenimiento Ciudades";
             // 
             // btnAgregarCiudad
             // 
-            this.btnAgregarCiudad.Location = new System.Drawing.Point(132, 38);
+            this.btnAgregarCiudad.Location = new System.Drawing.Point(305, 36);
             this.btnAgregarCiudad.Name = "btnAgregarCiudad";
             this.btnAgregarCiudad.Size = new System.Drawing.Size(75, 23);
             this.btnAgregarCiudad.TabIndex = 47;
@@ -310,7 +314,7 @@
             // 
             this.txtNombreCiudad.Location = new System.Drawing.Point(7, 39);
             this.txtNombreCiudad.Name = "txtNombreCiudad";
-            this.txtNombreCiudad.Size = new System.Drawing.Size(100, 20);
+            this.txtNombreCiudad.Size = new System.Drawing.Size(122, 20);
             this.txtNombreCiudad.TabIndex = 0;
             // 
             // groupBox3
@@ -345,13 +349,13 @@
             // 
             this.txtPrecio.Location = new System.Drawing.Point(307, 42);
             this.txtPrecio.Name = "txtPrecio";
-            this.txtPrecio.Size = new System.Drawing.Size(100, 20);
+            this.txtPrecio.Size = new System.Drawing.Size(122, 20);
             this.txtPrecio.TabIndex = 47;
             this.txtPrecio.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // btnTrazarRuta
             // 
-            this.btnTrazarRuta.Location = new System.Drawing.Point(433, 40);
+            this.btnTrazarRuta.Location = new System.Drawing.Point(452, 40);
             this.btnTrazarRuta.Name = "btnTrazarRuta";
             this.btnTrazarRuta.Size = new System.Drawing.Size(75, 23);
             this.btnTrazarRuta.TabIndex = 46;
@@ -396,6 +400,24 @@
             this.label7.Size = new System.Drawing.Size(76, 12);
             this.label7.TabIndex = 42;
             this.label7.Text = "Ciudad Origen";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(158)))), ((int)(((byte)(161)))), ((int)(((byte)(176)))));
+            this.label9.Location = new System.Drawing.Point(157, 24);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(109, 12);
+            this.label9.TabIndex = 49;
+            this.label9.Text = "Coordenadas Ciudad";
+            // 
+            // txtCoordenadasCiudad
+            // 
+            this.txtCoordenadasCiudad.Location = new System.Drawing.Point(158, 39);
+            this.txtCoordenadasCiudad.Name = "txtCoordenadasCiudad";
+            this.txtCoordenadasCiudad.Size = new System.Drawing.Size(122, 20);
+            this.txtCoordenadasCiudad.TabIndex = 48;
             // 
             // Form1
             // 
@@ -462,6 +484,8 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtPrecio;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtCoordenadasCiudad;
     }
 }
 
