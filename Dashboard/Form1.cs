@@ -131,7 +131,7 @@ namespace Dashboard
         }
         #endregion
 
-        #region Algoritmo Grafos Maps
+        #region Algoritmo Grafos Maps - Metaheurística
         public class Algorithm
         {
             private List<Node> _graph { get; set; }
@@ -236,6 +236,189 @@ namespace Dashboard
 
 
         #endregion
-        
+
+        #region Algoritmo Grafos Maps - Ejercicios de Clase
+        public class Grafo
+        {
+            public class Vertice
+            {
+                public Vertice sig;
+                public Arista ady;
+                public string nombre = "";
+
+            }
+            public class Arista
+            {
+                public Arista sig;
+                public Vertice ady;
+                public int peso;
+            }
+
+            public Vertice h;
+            public void Inicializa()
+            {
+                h = null;
+            }
+            public bool Vacio()
+            {
+                return h == null;
+            }
+            public Vertice GetVertice(string nombre)
+            {
+                Vertice aux;
+                aux = h;
+                while (aux != null)
+                {
+                    if (aux.nombre == nombre)
+                    {
+                        return aux;
+                    }
+                    aux = aux.sig;
+                }
+                return null;
+            }
+            public void InsertaArista(Vertice origen, Vertice destino, int peso)
+            {
+                Arista nueva = new Arista();
+                nueva.peso = peso;
+                nueva.sig = null;
+                nueva.ady = null;
+
+                Arista aux;
+                aux = origen.ady;
+
+                if (aux == null)
+                {
+                    origen.ady = nueva;
+                    nueva.ady = destino;
+                }
+                else
+                {
+                    while (aux.sig != null)
+                    {
+                        aux = aux.sig;
+                    }
+                    aux.sig = nueva;
+                    nueva.ady = destino;
+                }
+            }
+            public void InsertaVertice(string nombre)
+            {
+                Vertice nuevo = new Vertice();
+                nuevo.nombre = nombre;
+                nuevo.sig = null;
+                nuevo.ady = null;
+
+                if (Vacio())
+                {
+                    h = nuevo;
+                }
+                else
+                {
+                    Vertice aux;
+                    aux = h;
+                    while (aux.sig != null)
+                    {
+                        aux = aux.sig;
+                    }
+                    aux.sig = nuevo;
+                }
+            }
+            public void PrimeroMejor(Vertice origen, Vertice destino)
+            {
+                //int CostoActual;
+                //int band;
+                //int band2 = 0;
+                //Vertice VerticeActual;
+                //Vertice DestinoActual;
+                //Arista aux;
+                //LinkedList<Tuple<Vertice, int>> ListaCostos = new LinkedList<Tuple<Vertice, int>>();
+                //LinkedList<Tuple<Vertice, int>> ListaOrdenada = new LinkedList<Tuple<Vertice, int>>();
+                //Stack<Tuple<Vertice, Vertice>> pila = new Stack<Tuple<Vertice, Vertice>>();
+                //LinkedList<Tuple<Vertice, int>>.Enumerator i;
+                //LinkedList<Tuple<Vertice, int>>.Enumerator j;
+
+                //ListaCostos.AddLast(VerticeCosto(origen, 0));
+                //ListaOrdenada.AddLast(VerticeCosto(origen, 0));
+                //while (ListaOrdenada.Count > 0)
+                //{
+                //    VerticeActual = ListaOrdenada.First.Value.first;
+                //    CostoActual = ListaOrdenada.First.Value.second;
+                //    ListaOrdenada.RemoveFirst();
+                //    if (VerticeActual == destino)
+                //    {
+                //        band2 = 1;
+                //        DestinoActual = destino;
+                //        while (pila.Count > 0)
+                //        {
+                //            Console.Write(DestinoActual.nombre);
+                //            Console.Write("<-");
+                //            while (pila.Count > 0 && pila.Peek().second != DestinoActual)
+                //            {
+                //                pila.Pop();
+                //            }
+                //            if (pila.Count > 0)
+                //            {
+                //                DestinoActual = pila.Peek().first;
+                //            }
+                //        }
+                //        break;
+                //    }
+                //    aux = VerticeActual.ady;
+                //    while (aux != null)
+                //    {
+                //        band = 0;
+                //        CostoActual = CostoActual + aux.peso;
+                //        for (i = ListaCostos.GetEnumerator(); i.MoveNext();)
+                //        {
+                //            if (aux.ady == i.first)
+                //            {
+                //                band = 1;
+                //                if (CostoActual < i.second)
+                //                {
+                //                    i.Current.second = CostoActual;
+                //                    for (j = ListaOrdenada.GetEnumerator(); j.MoveNext();)
+                //                    {
+                //                        if (j.first == aux.ady)
+                //                        {
+                //                            j.Current.second = CostoActual;
+                //                        }
+                //                    }
+                //                    pila.Push(VerticeVertice(VerticeActual, aux.ady));
+                //                    CostoActual = CostoActual - aux.peso;
+                //                }
+                //            }
+                //        }
+                //        if (band == 0)
+                //        {
+                //            ListaCostos.AddLast(VerticeCosto(aux.ady, CostoActual));
+                //            ListaOrdenada.AddLast(VerticeCosto(aux.ady, CostoActual));
+                //            pila.Push(VerticeVertice(VerticeActual, aux.ady));
+                //            CostoActual = CostoActual - aux.peso;
+                //        }
+                //        aux = aux.sig;
+                //    }
+                //}
+                //if (band2 == 0)
+                //{
+                //    Console.Write("No hay una ruta entre esos dos vertices");
+                //    Console.Write("\n");
+                //}
+            }
+            public class Pair<T, U>
+            {
+                public Pair()
+                {
+                }
+                public Pair(T first, U second)
+                {
+                    this.First = first;
+                    this.Second = second;
+                }
+                public T First { get; set; }
+                public U Second { get; set; }
+            };
+        }
+        #endregion
     }
 }
