@@ -10,6 +10,7 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
+using static Dashboard.Form1.Grafo;
 
 namespace Dashboard
 {
@@ -25,6 +26,7 @@ namespace Dashboard
         PointLatLng final;
         double LatInicial = 15.489376;
         double LngInicial = -87.993609;
+        Grafo G = new Grafo();
 
         public Form1()
         {
@@ -44,20 +46,26 @@ namespace Dashboard
             gMapControl1.Position = new PointLatLng(LatInicial, LngInicial);
             gMapControl1.MinZoom = 0;
             gMapControl1.MaxZoom = 24;
-            gMapControl1.Zoom = 9;
-            gMapControl1.AutoScroll = true;
+            gMapControl1.Zoom = 11;
+            gMapControl1.AutoScroll = true;            
 
-            //Marcador
-            markerOverlay = new GMapOverlay("Marcador");
-            marker = new GMarkerGoogle(new PointLatLng(LatInicial, LngInicial), GMarkerGoogleType.blue);
-            markerOverlay.Markers.Add(marker);//Agregamos al mapa
+            //Inicializar grafo
+            G.Inicializa();
 
-            //agregamos un tooltip de texto a los marcadores
-            marker.ToolTipMode = MarkerTooltipMode.Always;
-            marker.ToolTipText = string.Format("Ubicación:\n Latitud:{0}\n Longitud:{1}", LatInicial, LngInicial);
+            //Vertices pre-cargados
+            G.InsertaVertice("SPS", "15.489376,-87.993609");
+            G.InsertaVertice("VILLANUEVA", "15.3175553,-87.9907499");
+            G.InsertaVertice("PROGRESO", "15.4156355,-87.8642911");
+            G.InsertaVertice("TGU", "14.0839962,-87.2399922");
 
-            //ahora agregamos el mapa y el marcador al control map
-            gMapControl1.Overlays.Add(markerOverlay);
+            //Aristas pre-cargadas
+            G.InsertaArista(G.GetVertice("SPS"), G.GetVertice("VILLANUEVA"), 500);
+            G.InsertaArista(G.GetVertice("SPS"), G.GetVertice("PROGRESO"), 600);
+            G.InsertaArista(G.GetVertice("PROGRESO"), G.GetVertice("TGU"), 300);
+            G.InsertaArista(G.GetVertice("VILLANUEVA"), G.GetVertice("TGU"), 300);
+
+            //Actualizar mapa
+            ActualizarMapa();
         }
         private void btnDashbord_Click(object sender, EventArgs e)
         {
@@ -88,7 +96,26 @@ namespace Dashboard
         }
         private void btnAgregarCiudad_Click(object sender, EventArgs e)
         {
+            if(G.ObtenerTotalVertices() > 10)
+            {
+                MessageBox.Show("Se ha alcanzado el limite de 10 vertices permitido.");
+                return;
+            }
 
+            if(txtNombreCiudad.Text == "")
+            {
+                MessageBox.Show("Debes ingresar un nombre para la ciudad.");
+                return;
+            }
+
+            if (txtCoordenadasCiudad.Text == "")
+            {
+                MessageBox.Show("Debes ingresar una coordenada para la ciudad.");
+                return;
+            }
+
+            G.InsertaVertice(txtNombreCiudad.Text, txtCoordenadasCiudad.Text);
+            ActualizarMapa();
         }
         private void btnTrazarRuta_Click(object sender, EventArgs e)
         {
@@ -97,31 +124,33 @@ namespace Dashboard
         private void btnMejorRuta_Click_1(object sender, EventArgs e)
         {
             //Ejemplo de uso de algoritmo
-            Nodo NodoA = new Nodo() { Ciudad = "A" };
-            Nodo NodoB = new Nodo() { Ciudad = "B" };
-            Nodo NodoC = new Nodo() { Ciudad = "C" };
-            Nodo NodoD = new Nodo() { Ciudad = "D" };
+            //Nodo NodoA = new Nodo() { Ciudad = "A" };
+            //Nodo NodoB = new Nodo() { Ciudad = "B" };
+            //Nodo NodoC = new Nodo() { Ciudad = "C" };
+            //Nodo NodoD = new Nodo() { Ciudad = "D" };
 
-            NodoA.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 5 });
-            NodoA.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 15 });
-            NodoA.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 7 });
-            NodoB.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 5 });
-            NodoB.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 10 });
-            NodoB.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 5 });
-            NodoC.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 15 });
-            NodoC.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 10 });
-            NodoC.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 3 });
-            NodoD.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 7 });
-            NodoD.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 5 });
-            NodoD.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 3 });
+            //NodoA.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 5 });
+            //NodoA.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 15 });
+            //NodoA.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 7 });
+            //NodoB.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 5 });
+            //NodoB.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 10 });
+            //NodoB.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 5 });
+            //NodoC.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 15 });
+            //NodoC.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 10 });
+            //NodoC.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 3 });
+            //NodoD.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 7 });
+            //NodoD.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 5 });
+            //NodoD.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 3 });
 
-            List<Nodo> grafo = new List<Nodo>() {
-                NodoA, NodoB, NodoC, NodoD
-            };
+            //List<Nodo> grafo = new List<Nodo>() {
+            //    NodoA, NodoB, NodoC, NodoD
+            //};
 
-            var Algoritmo = new Algoritmo(grafo, 3, NodoA);
-            Algoritmo.Ejecutar();
-            MessageBox.Show(Algoritmo.GetAllRutas);
+            //var Algoritmo = new Algoritmo(grafo, 3, NodoA);
+            //Algoritmo.Ejecutar();
+            //MessageBox.Show(Algoritmo.GetAllRutas);                      
+
+            G.PrimeroMejor(G.GetVertice("SPS"), G.GetVertice("TGU"));
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -243,7 +272,7 @@ namespace Dashboard
                 public Vertice sig;
                 public Arista ady;
                 public string nombre = "";
-
+                public string coordenada = "";
             }
             public class Arista
             {
@@ -300,10 +329,11 @@ namespace Dashboard
                     nueva.ady = destino;
                 }
             }
-            public void InsertaVertice(string nombre)
+            public void InsertaVertice(string nombre, string coordenada)
             {
                 Vertice nuevo = new Vertice();
                 nuevo.nombre = nombre;
+                nuevo.coordenada = coordenada;
                 nuevo.sig = null;
                 nuevo.ady = null;
 
@@ -322,6 +352,25 @@ namespace Dashboard
                     aux.sig = nuevo;
                 }
             }
+            public int ObtenerTotalVertices()
+            {
+                int total = 0;
+                if (Vacio())
+                {
+                    total = 0;
+                }
+                else
+                {
+                    Vertice aux;
+                    aux = h;
+                    while (aux.sig != null)
+                    {
+                        aux = aux.sig;
+                        total += 1;
+                    }
+                }
+                return total;                    
+            }
             public void PrimeroMejor(Vertice origen, Vertice destino)
             {
                 //int CostoActual;
@@ -334,14 +383,14 @@ namespace Dashboard
                 //LinkedList<Tuple<Vertice, int>> ListaOrdenada = new LinkedList<Tuple<Vertice, int>>();
                 //Stack<Tuple<Vertice, Vertice>> pila = new Stack<Tuple<Vertice, Vertice>>();
                 //LinkedList<Tuple<Vertice, int>>.Enumerator i;
-                //LinkedList<Tuple<Vertice, int>>.Enumerator j;
+                //LinkedList<Tuple<Vertice, int>>.Enumerator j;                
 
                 //ListaCostos.AddLast(VerticeCosto(origen, 0));
                 //ListaOrdenada.AddLast(VerticeCosto(origen, 0));
                 //while (ListaOrdenada.Count > 0)
                 //{
-                //    VerticeActual = ListaOrdenada.First.Value.first;
-                //    CostoActual = ListaOrdenada.First.Value.second;
+                //    VerticeActual = ListaOrdenada.First.Value.Item1;
+                //    CostoActual = ListaOrdenada.First.Value.Item2;
                 //    ListaOrdenada.RemoveFirst();
                 //    if (VerticeActual == destino)
                 //    {
@@ -410,12 +459,50 @@ namespace Dashboard
                 }
                 public Pair(T first, U second)
                 {
-                    this.First = first;
-                    this.Second = second;
+                    this.first = first;
+                    this.second = second;
                 }
-                public T First { get; set; }
-                public U Second { get; set; }
+                public T first { get; set; }
+                public U second { get; set; }
             };
+        }
+
+        public void ActualizarMapa()
+        {
+            //Actualizar vertices marcados en el mapa
+            if (!G.Vacio())
+            {
+                Vertice aux;
+                double coordenadaX;
+                double coordenadaY;
+                aux = G.h;
+                while (aux.sig != null)
+                {
+                    //Marcador
+                    markerOverlay = new GMapOverlay(aux.nombre);
+                    coordenadaX = Convert.ToDouble(aux.coordenada.Split(',')[0]);
+                    coordenadaY = Convert.ToDouble(aux.coordenada.Split(',')[1]);
+                    marker = new GMarkerGoogle(new PointLatLng(coordenadaX, coordenadaY), GMarkerGoogleType.blue);
+                    markerOverlay.Markers.Add(marker);//Agregamos al mapa
+                    //agregamos un tooltip de texto a los marcadores
+                    marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                    marker.ToolTipText = string.Format("{0}:\n Latitud:{1}\n Longitud:{2}", aux.nombre, coordenadaX, coordenadaY);
+                    //ahora agregamos el mapa y el marcador al control map
+                    gMapControl1.Overlays.Add(markerOverlay);
+                    aux = aux.sig;
+                }
+                //Marcador
+                markerOverlay = new GMapOverlay(aux.nombre);
+                coordenadaX = Convert.ToDouble(aux.coordenada.Split(',')[0]);
+                coordenadaY = Convert.ToDouble(aux.coordenada.Split(',')[1]);
+                marker = new GMarkerGoogle(new PointLatLng(coordenadaX, coordenadaY), GMarkerGoogleType.blue);
+                markerOverlay.Markers.Add(marker);//Agregamos al mapa
+                                                  //agregamos un tooltip de texto a los marcadores
+                marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                marker.ToolTipText = string.Format("{0}:\n Latitud:{1}\n Longitud:{2}", aux.nombre, coordenadaX, coordenadaY);
+                //ahora agregamos el mapa y el marcador al control map
+                gMapControl1.Overlays.Add(markerOverlay);
+            }
         }
         #endregion
     }
