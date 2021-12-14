@@ -27,6 +27,8 @@ namespace Dashboard
         double LatInicial = 15.489376;
         double LngInicial = -87.993609;
         Grafo G = new Grafo();
+        public List<Vertice> ciudadesList = new List<Vertice>();
+        public List<Rutas> rutasList = new List<Rutas>();
 
         public Form1()
         {
@@ -57,15 +59,28 @@ namespace Dashboard
             G.InsertaVertice("VILLANUEVA", "15.3175553,-87.9907499");
             G.InsertaVertice("PROGRESO", "15.4156355,-87.8642911");
             G.InsertaVertice("TGU", "14.0839962,-87.2399922");
+            G.InsertaVertice("TELA", "15.7716615,-87.5342203");
+
+            G.InsertaVertice("PUERTO CORTES", "15.8312096,-87.9440977");
+            G.InsertaVertice("COLON", "15.7780954,-87.6584023");
+            G.InsertaVertice("CHOLOMA", "15.5953142,-87.9908587");
+            G.InsertaVertice("LA LIMA", "15.4369242,-87.9291202");
+            G.InsertaVertice("OMOA", "15.7708813,-88.0403138");
 
             //Aristas pre-cargadas
-            G.InsertaArista(G.GetVertice("SPS"), G.GetVertice("VILLANUEVA"), 500);
-            G.InsertaArista(G.GetVertice("SPS"), G.GetVertice("PROGRESO"), 600);
-            G.InsertaArista(G.GetVertice("PROGRESO"), G.GetVertice("TGU"), 300);
-            G.InsertaArista(G.GetVertice("VILLANUEVA"), G.GetVertice("TGU"), 300);
+            InsertarAristaEnGrafo("SPS", "VILLANUEVA", 500);
+            InsertarAristaEnGrafo("SPS", "PROGRESO", 600);
+            InsertarAristaEnGrafo("PROGRESO", "TGU", 300);
+            InsertarAristaEnGrafo("VILLANUEVA", "TGU", 300);
 
             //Actualizar mapa
             ActualizarMapa();
+
+            //Actualizar ciudades
+            ActualizarCiudades();
+
+            //Actualizar los combo box
+            ActualizarComboBox();
         }
         private void btnDashbord_Click(object sender, EventArgs e)
         {
@@ -96,7 +111,7 @@ namespace Dashboard
         }
         private void btnAgregarCiudad_Click(object sender, EventArgs e)
         {
-            if(G.ObtenerTotalVertices() > 10)
+            if(G.ObtenerTotalVertices() >= 10)
             {
                 MessageBox.Show("Se ha alcanzado el limite de 10 vertices permitido.");
                 return;
@@ -116,45 +131,131 @@ namespace Dashboard
 
             G.InsertaVertice(txtNombreCiudad.Text, txtCoordenadasCiudad.Text);
             ActualizarMapa();
+            ActualizarCiudades();
+            ActualizarComboBox();
+
+            txtNombreCiudad.Text = "";
+            txtCoordenadasCiudad.Text = "";
         }
         private void btnTrazarRuta_Click(object sender, EventArgs e)
         {
-
+            if (txtPrecio.Text == "") 
+            {
+                MessageBox.Show("Debes ingresar un precio para la ruta.");
+                return;
+            }
+            string nombreCiudadOrigen = cmbCiudadOrigenRutas.Text;
+            string nombreCiudadDestino = cmbCiudadDestinoRutas.Text;            
+            InsertarAristaEnGrafo(nombreCiudadOrigen, nombreCiudadDestino, Convert.ToInt32(txtPrecio.Text));
+            txtPrecio.Text = "";
         }
         private void btnMejorRuta_Click_1(object sender, EventArgs e)
         {
-            //Ejemplo de uso de algoritmo
-            //Nodo NodoA = new Nodo() { Ciudad = "A" };
-            //Nodo NodoB = new Nodo() { Ciudad = "B" };
-            //Nodo NodoC = new Nodo() { Ciudad = "C" };
-            //Nodo NodoD = new Nodo() { Ciudad = "D" };
-
-            //NodoA.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 5 });
-            //NodoA.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 15 });
-            //NodoA.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 7 });
-            //NodoB.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 5 });
-            //NodoB.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 10 });
-            //NodoB.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 5 });
-            //NodoC.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 15 });
-            //NodoC.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 10 });
-            //NodoC.Caminos.Add(new Camino() { Nodo = NodoD, Distancia = 3 });
-            //NodoD.Caminos.Add(new Camino() { Nodo = NodoA, Distancia = 7 });
-            //NodoD.Caminos.Add(new Camino() { Nodo = NodoB, Distancia = 5 });
-            //NodoD.Caminos.Add(new Camino() { Nodo = NodoC, Distancia = 3 });
-
-            //List<Nodo> grafo = new List<Nodo>() {
-            //    NodoA, NodoB, NodoC, NodoD
-            //};
-
-            //var Algoritmo = new Algoritmo(grafo, 3, NodoA);
-            //Algoritmo.Ejecutar();
-            //MessageBox.Show(Algoritmo.GetAllRutas);                      
-
             G.PrimeroMejor(G.GetVertice("SPS"), G.GetVertice("TGU"));
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        public void ActualizarMapa()
+        {
+            //Actualizar vertices marcados en el mapa
+            if (!G.Vacio())
+            {
+                Vertice aux;
+                double coordenadaX;
+                double coordenadaY;
+                aux = G.h;
+                while (aux.sig != null)
+                {
+                    //Marcador
+                    markerOverlay = new GMapOverlay(aux.nombre);
+                    coordenadaX = Convert.ToDouble(aux.coordenada.Split(',')[0]);
+                    coordenadaY = Convert.ToDouble(aux.coordenada.Split(',')[1]);
+                    marker = new GMarkerGoogle(new PointLatLng(coordenadaX, coordenadaY), GMarkerGoogleType.blue);
+                    markerOverlay.Markers.Add(marker);//Agregamos al mapa
+                    //agregamos un tooltip de texto a los marcadores
+                    marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                    marker.ToolTipText = string.Format("{0}:\n Latitud:{1}\n Longitud:{2}", aux.nombre, coordenadaX, coordenadaY);
+                    //ahora agregamos el mapa y el marcador al control map
+                    gMapControl1.Overlays.Add(markerOverlay);
+                    aux = aux.sig;
+                }
+                if (aux != null) 
+                {
+                    //Marcador
+                    markerOverlay = new GMapOverlay(aux.nombre);
+                    coordenadaX = Convert.ToDouble(aux.coordenada.Split(',')[0]);
+                    coordenadaY = Convert.ToDouble(aux.coordenada.Split(',')[1]);
+                    marker = new GMarkerGoogle(new PointLatLng(coordenadaX, coordenadaY), GMarkerGoogleType.blue);
+                    markerOverlay.Markers.Add(marker);//Agregamos al mapa
+                                                      //agregamos un tooltip de texto a los marcadores
+                    marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                    marker.ToolTipText = string.Format("{0}:\n Latitud:{1}\n Longitud:{2}", aux.nombre, coordenadaX, coordenadaY);
+                    //ahora agregamos el mapa y el marcador al control map
+                    gMapControl1.Overlays.Add(markerOverlay);
+                }                
+            }
+        }
+        public void ActualizarCiudades() 
+        {
+            //Actualizar ciudades ingresadas en memoria
+            if (!G.Vacio())
+            {
+                Vertice aux;
+                aux = G.h;
+                while (aux.sig != null)
+                {
+                    if (!ciudadesList.Contains(aux))
+                    {
+                        ciudadesList.Add(aux);
+                    }
+                    
+                    aux = aux.sig;
+                }
+                if (aux != null && !ciudadesList.Contains(aux)) {
+                    ciudadesList.Add(aux);
+                }
+            }
+        }
+        public void ActualizarComboBox() 
+        {
+            cmbCiudadOrigenRutas.Items.Clear();
+            cmbCiudadDestinoRutas.Items.Clear();
+            cmbCiudadOrigen.Items.Clear();
+            cmbCiudadDestino.Items.Clear();
+
+            foreach (Vertice ciudad in ciudadesList)
+            {
+                cmbCiudadOrigenRutas.Items.Add(ciudad.nombre);
+                cmbCiudadDestinoRutas.Items.Add(ciudad.nombre);
+                cmbCiudadOrigen.Items.Add(ciudad.nombre);
+                cmbCiudadDestino.Items.Add(ciudad.nombre);
+            }
+
+            cmbCiudadOrigenRutas.SelectedIndex = 0;
+            cmbCiudadDestinoRutas.SelectedIndex = 0;
+            cmbCiudadOrigen.SelectedIndex = 0;
+            cmbCiudadDestino.SelectedIndex = 0;
+        }
+        public void InsertarAristaEnGrafo(string nombreCiudadOrigen, string nombreCiudadDestino, int precio) 
+        {
+            G.InsertaArista(G.GetVertice(nombreCiudadOrigen), G.GetVertice(nombreCiudadDestino), precio);
+            rutasList.Add(new Rutas(G.GetVertice(nombreCiudadOrigen), G.GetVertice(nombreCiudadDestino), precio));
+        }
+
+        public class Rutas 
+        {
+            public Rutas(Vertice origen, Vertice destino, int precio)
+            {
+                Origen = origen;
+                Destino = destino;
+                Precio = precio;
+            }
+            public Vertice Origen { get; set; }
+            public Vertice Destino { get; set; }
+            public int Precio { get; set; }
         }
         #endregion
 
@@ -267,6 +368,7 @@ namespace Dashboard
         #region Algoritmo Grafos Maps - Ejercicios de Clase
         public class Grafo
         {
+            public Vertice h;
             public class Vertice
             {
                 public Vertice sig;
@@ -279,9 +381,7 @@ namespace Dashboard
                 public Arista sig;
                 public Vertice ady;
                 public int peso;
-            }
-
-            public Vertice h;
+            }            
             public void Inicializa()
             {
                 h = null;
@@ -354,7 +454,7 @@ namespace Dashboard
             }
             public int ObtenerTotalVertices()
             {
-                int total = 0;
+                int total = 1;
                 if (Vacio())
                 {
                     total = 0;
@@ -465,44 +565,6 @@ namespace Dashboard
                 public T first { get; set; }
                 public U second { get; set; }
             };
-        }
-
-        public void ActualizarMapa()
-        {
-            //Actualizar vertices marcados en el mapa
-            if (!G.Vacio())
-            {
-                Vertice aux;
-                double coordenadaX;
-                double coordenadaY;
-                aux = G.h;
-                while (aux.sig != null)
-                {
-                    //Marcador
-                    markerOverlay = new GMapOverlay(aux.nombre);
-                    coordenadaX = Convert.ToDouble(aux.coordenada.Split(',')[0]);
-                    coordenadaY = Convert.ToDouble(aux.coordenada.Split(',')[1]);
-                    marker = new GMarkerGoogle(new PointLatLng(coordenadaX, coordenadaY), GMarkerGoogleType.blue);
-                    markerOverlay.Markers.Add(marker);//Agregamos al mapa
-                    //agregamos un tooltip de texto a los marcadores
-                    marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-                    marker.ToolTipText = string.Format("{0}:\n Latitud:{1}\n Longitud:{2}", aux.nombre, coordenadaX, coordenadaY);
-                    //ahora agregamos el mapa y el marcador al control map
-                    gMapControl1.Overlays.Add(markerOverlay);
-                    aux = aux.sig;
-                }
-                //Marcador
-                markerOverlay = new GMapOverlay(aux.nombre);
-                coordenadaX = Convert.ToDouble(aux.coordenada.Split(',')[0]);
-                coordenadaY = Convert.ToDouble(aux.coordenada.Split(',')[1]);
-                marker = new GMarkerGoogle(new PointLatLng(coordenadaX, coordenadaY), GMarkerGoogleType.blue);
-                markerOverlay.Markers.Add(marker);//Agregamos al mapa
-                                                  //agregamos un tooltip de texto a los marcadores
-                marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-                marker.ToolTipText = string.Format("{0}:\n Latitud:{1}\n Longitud:{2}", aux.nombre, coordenadaX, coordenadaY);
-                //ahora agregamos el mapa y el marcador al control map
-                gMapControl1.Overlays.Add(markerOverlay);
-            }
         }
         #endregion
     }
