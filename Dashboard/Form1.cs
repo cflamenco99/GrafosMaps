@@ -22,8 +22,6 @@ namespace Dashboard
 
         GMarkerGoogle marker;
         GMapOverlay markerOverlay;
-        PointLatLng inicio;
-        PointLatLng final;
         double LatInicial = 15.489376;
         double LngInicial = -87.993609;
         Grafo G = new Grafo();
@@ -38,9 +36,7 @@ namespace Dashboard
             pnlNav.Top = btnMapas.Top;
             pnlNav.Left = btnMapas.Left;
             btnMapas.BackColor = Color.FromArgb(46, 51, 73);
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
+
             //Creando las dimensiones del GMAPCONTROL(herramienta)
             gMapControl1.DragButton = MouseButtons.Left;
             gMapControl1.CanDragMap = true;
@@ -49,7 +45,7 @@ namespace Dashboard
             gMapControl1.MinZoom = 0;
             gMapControl1.MaxZoom = 24;
             gMapControl1.Zoom = 11;
-            gMapControl1.AutoScroll = true;            
+            gMapControl1.AutoScroll = true;
 
             //Inicializar grafo
             G.Inicializa();
@@ -68,10 +64,10 @@ namespace Dashboard
             G.InsertaVertice("OMOA", "15.7708813,-88.0403138");
 
             //Aristas pre-cargadas
-            InsertarAristaEnGrafo("SPS", "VILLANUEVA", 500);
-            InsertarAristaEnGrafo("SPS", "PROGRESO", 600);
-            InsertarAristaEnGrafo("PROGRESO", "TGU", 300);
-            InsertarAristaEnGrafo("VILLANUEVA", "TGU", 300);
+            InsertarAristaEnGrafo("SPS", "VILLANUEVA", 5);
+            InsertarAristaEnGrafo("SPS", "PROGRESO", 6);
+            InsertarAristaEnGrafo("PROGRESO", "TGU", 3);
+            InsertarAristaEnGrafo("VILLANUEVA", "TGU", 3);
 
             //Actualizar mapa
             ActualizarMapa();
@@ -81,6 +77,10 @@ namespace Dashboard
 
             //Actualizar los combo box
             ActualizarComboBox();
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
         }
         private void btnDashbord_Click(object sender, EventArgs e)
         {
@@ -104,11 +104,7 @@ namespace Dashboard
         private void gMapControl1_Load(object sender, EventArgs e)
         {
 
-        }
-        private void btnMejorRuta_Click(object sender, EventArgs e)
-        {
-            
-        }
+        }        
         private void btnAgregarCiudad_Click(object sender, EventArgs e)
         {
             if(G.ObtenerTotalVertices() >= 10)
@@ -157,7 +153,6 @@ namespace Dashboard
         {
 
         }
-
         public void ActualizarMapa()
         {
             //Actualizar vertices marcados en el mapa
@@ -241,10 +236,35 @@ namespace Dashboard
         }
         public void InsertarAristaEnGrafo(string nombreCiudadOrigen, string nombreCiudadDestino, int precio) 
         {
-            G.InsertaArista(G.GetVertice(nombreCiudadOrigen), G.GetVertice(nombreCiudadDestino), precio);
+            //Proceso de insercion y actualizacion de listas
+            Vertice ciudadOrigen = G.GetVertice(nombreCiudadOrigen);
+            Vertice ciudadDestino = G.GetVertice(nombreCiudadDestino);
+            G.InsertaArista(ciudadOrigen, ciudadDestino, precio);
             rutasList.Add(new Rutas(G.GetVertice(nombreCiudadOrigen), G.GetVertice(nombreCiudadDestino), precio));
-        }
 
+            //Crear ruta en el mapa
+            GMapOverlay Poligono = new GMapOverlay(string.Format("{0}-{1}", nombreCiudadOrigen, nombreCiudadDestino));
+
+            List<PointLatLng> puntos = new List<PointLatLng>();
+            //variables para almacenar los datos
+            double lng, lat;
+            //agregamos los datos del grid
+            lat = Convert.ToDouble(ciudadOrigen.coordenada.Split(',')[0]);
+            lng = Convert.ToDouble(ciudadOrigen.coordenada.Split(',')[1]);
+            puntos.Add(new PointLatLng(lat, lng));
+
+            lat = Convert.ToDouble(ciudadDestino.coordenada.Split(',')[0]);
+            lng = Convert.ToDouble(ciudadDestino.coordenada.Split(',')[1]);
+            puntos.Add(new PointLatLng(lat, lng));
+
+            GMapPolygon PuntosRuta = new GMapPolygon(puntos, string.Format("RUTA-{0}-{1}", nombreCiudadOrigen, nombreCiudadDestino));
+            Poligono.Polygons.Add(PuntosRuta);
+            gMapControl1.Overlays.Add(Poligono);
+
+            //Actulizar el mapa
+            gMapControl1.Zoom = gMapControl1.Zoom + 1;
+            gMapControl1.Zoom = gMapControl1.Zoom - 1;
+        }
         public class Rutas 
         {
             public Rutas(Vertice origen, Vertice destino, int precio)
@@ -257,113 +277,7 @@ namespace Dashboard
             public Vertice Destino { get; set; }
             public int Precio { get; set; }
         }
-        #endregion
-
-        #region Algoritmo Grafos Maps - Metaheurística
-        public class Algoritmo
-        {
-            private List<Nodo> _grafo { get; set; }
-            private int _n { get; set; }
-            private Nodo _origen { get; set; }
-            private List<Ruta> _soluciones { get; set; }
-
-            public string GetAllRutas
-            {
-                get
-                {
-                    string result = "";
-                    foreach (var Ruta in _soluciones)
-                    {
-                        foreach (var Nodo in Ruta.Nodos)
-                        {
-                            result += Nodo.Ciudad + ", ";
-                        }
-                        result += " " + Ruta.TotalDistancia + "\n";
-                    }
-
-                    return result;
-                }
-            }
-
-            public Algoritmo(List<Nodo> grafo, int n, Nodo origin)
-            {
-                _grafo = grafo;
-                _n = n;
-                _origen = origin;
-            }
-
-            public void Ejecutar()
-            {
-                _soluciones = new List<Ruta>();
-                for (int i = 0; i < _n; i++)
-                {
-                    _soluciones.Add(GenerarRuta());
-                }
-                _soluciones = _soluciones.OrderBy(d => d.TotalDistancia).ToList();
-            }
-
-            public Ruta GenerarRuta()
-            {
-                var solution = new Ruta();
-                solution.Nodos.Add(_origen);
-                Nodo current = _origen;
-                for (int i = 0; i < _grafo.Count - 1; i++)
-                {
-                    Nodo next = null;
-                    do
-                    {
-                        next = NextNodo(current);
-                    } while (solution.Nodos.Contains(next));
-
-                    solution.Nodos.Add(next);
-                    solution.TotalDistancia += current.Caminos.Where(d => d.Nodo.Ciudad == next.Ciudad).First().Distancia;
-
-                    current = next;
-                }
-
-                solution.Nodos.Add(_origen);
-                solution.TotalDistancia += current.Caminos.Where(d => d.Nodo.Ciudad == _origen.Ciudad).First().Distancia;
-                return solution;
-            }
-
-            private Nodo NextNodo(Nodo current)
-            {
-                int nextNodo = new Random().Next(0, _grafo.Count - 1);
-                return current.Caminos[nextNodo].Nodo;
-            }
-        }
-
-        public class Nodo
-        {
-            public string Ciudad { get; set; }
-            public List<Camino> Caminos { get; set; }
-
-            public Nodo()
-            {
-                Caminos = new List<Camino>();
-            }
-        }
-
-        public struct Camino
-        {
-            public Nodo Nodo { get; set; }
-            public int Distancia { get; set; }
-        }
-
-        public class Ruta
-        {
-            public List<Nodo> Nodos { get; set; }
-            public int TotalDistancia { get; set; }
-
-            public Ruta()
-            {
-                Nodos = new List<Nodo>();
-                TotalDistancia = 0;
-            }
-        }
-
-
-        #endregion
+        #endregion        
 
         #region Algoritmo Grafos Maps - Ejercicios de Clase
         public class Grafo
