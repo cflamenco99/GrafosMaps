@@ -147,7 +147,9 @@ namespace Dashboard
         }
         private void btnMejorRuta_Click_1(object sender, EventArgs e)
         {
-            G.PrimeroMejor(G.GetVertice("SPS"), G.GetVertice("TGU"));
+            string nombreCiudadOrigen = cmbCiudadOrigen.Text;
+            string nombreCiudadDestino = cmbCiudadDestino.Text;
+            G.PrimeroMejor(G.GetVertice(nombreCiudadOrigen), G.GetVertice(nombreCiudadDestino));
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
