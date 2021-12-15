@@ -61,7 +61,6 @@ namespace Dashboard
             G.InsertaVertice("COLON", "15.7780954,-87.6584023");
             G.InsertaVertice("CHOLOMA", "15.5953142,-87.9908587");
             G.InsertaVertice("LA LIMA", "15.4369242,-87.9291202");
-            G.InsertaVertice("OMOA", "15.7708813,-88.0403138");
 
             //Aristas pre-cargadas
             InsertarAristaEnGrafo("SPS", "VILLANUEVA", 5);
@@ -192,7 +191,10 @@ namespace Dashboard
                     marker.ToolTipText = string.Format("{0}:\n Latitud:{1}\n Longitud:{2}", aux.nombre, coordenadaX, coordenadaY);
                     //ahora agregamos el mapa y el marcador al control map
                     gMapControl1.Overlays.Add(markerOverlay);
-                }                
+                }
+                //Actulizar el mapa
+                gMapControl1.Zoom = gMapControl1.Zoom + 1;
+                gMapControl1.Zoom = gMapControl1.Zoom - 1;
             }
         }
         public void ActualizarCiudades() 
