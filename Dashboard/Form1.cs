@@ -391,84 +391,83 @@ namespace Dashboard
             }
             public void PrimeroMejor(Vertice origen, Vertice destino)
             {
-                //int CostoActual;
-                //int band;
-                //int band2 = 0;
-                //Vertice VerticeActual;
-                //Vertice DestinoActual;
-                //Arista aux;
-                //LinkedList<Tuple<Vertice, int>> ListaCostos = new LinkedList<Tuple<Vertice, int>>();
-                //LinkedList<Tuple<Vertice, int>> ListaOrdenada = new LinkedList<Tuple<Vertice, int>>();
-                //Stack<Tuple<Vertice, Vertice>> pila = new Stack<Tuple<Vertice, Vertice>>();
-                //LinkedList<Tuple<Vertice, int>>.Enumerator i;
-                //LinkedList<Tuple<Vertice, int>>.Enumerator j;                
+                string mejorRuta = "";
+                int CostoActual, band, band2 = 0;
+                Vertice VerticeActual, DestinoActual;
+                Arista aux;
+                List<Pair<Vertice, int>> ListaCostos = new List<Pair<Vertice, int>>();
+                List<Pair<Vertice, int>> ListaOrdenada = new List<Pair<Vertice, int>>();
+                Stack<Pair<Vertice, Vertice>> pila = new Stack<Pair<Vertice, Vertice>>();
+                List<Pair<Vertice, int>>.Enumerator i,j;
+                ListaCostos.Add(new Pair<Vertice,int>(origen,0));
+                ListaOrdenada.Add(new Pair<Vertice, int>(origen, 0));
 
-                //ListaCostos.AddLast(VerticeCosto(origen, 0));
-                //ListaOrdenada.AddLast(VerticeCosto(origen, 0));
-                //while (ListaOrdenada.Count > 0)
-                //{
-                //    VerticeActual = ListaOrdenada.First.Value.Item1;
-                //    CostoActual = ListaOrdenada.First.Value.Item2;
-                //    ListaOrdenada.RemoveFirst();
-                //    if (VerticeActual == destino)
-                //    {
-                //        band2 = 1;
-                //        DestinoActual = destino;
-                //        while (pila.Count > 0)
-                //        {
-                //            Console.Write(DestinoActual.nombre);
-                //            Console.Write("<-");
-                //            while (pila.Count > 0 && pila.Peek().second != DestinoActual)
-                //            {
-                //                pila.Pop();
-                //            }
-                //            if (pila.Count > 0)
-                //            {
-                //                DestinoActual = pila.Peek().first;
-                //            }
-                //        }
-                //        break;
-                //    }
-                //    aux = VerticeActual.ady;
-                //    while (aux != null)
-                //    {
-                //        band = 0;
-                //        CostoActual = CostoActual + aux.peso;
-                //        for (i = ListaCostos.GetEnumerator(); i.MoveNext();)
-                //        {
-                //            if (aux.ady == i.first)
-                //            {
-                //                band = 1;
-                //                if (CostoActual < i.second)
-                //                {
-                //                    i.Current.second = CostoActual;
-                //                    for (j = ListaOrdenada.GetEnumerator(); j.MoveNext();)
-                //                    {
-                //                        if (j.first == aux.ady)
-                //                        {
-                //                            j.Current.second = CostoActual;
-                //                        }
-                //                    }
-                //                    pila.Push(VerticeVertice(VerticeActual, aux.ady));
-                //                    CostoActual = CostoActual - aux.peso;
-                //                }
-                //            }
-                //        }
-                //        if (band == 0)
-                //        {
-                //            ListaCostos.AddLast(VerticeCosto(aux.ady, CostoActual));
-                //            ListaOrdenada.AddLast(VerticeCosto(aux.ady, CostoActual));
-                //            pila.Push(VerticeVertice(VerticeActual, aux.ady));
-                //            CostoActual = CostoActual - aux.peso;
-                //        }
-                //        aux = aux.sig;
-                //    }
-                //}
-                //if (band2 == 0)
-                //{
-                //    Console.Write("No hay una ruta entre esos dos vertices");
-                //    Console.Write("\n");
-                //}
+                while (ListaOrdenada.Count > 0)
+                {
+                    VerticeActual = ListaOrdenada.First().first;
+                    CostoActual = ListaOrdenada.First().second;
+                    ListaOrdenada.RemoveAt(0);
+                    if (VerticeActual == destino)
+                    {
+                        band2 = 1;
+                        DestinoActual = destino;
+                        while (pila.Count > 0)
+                        {
+                            mejorRuta += DestinoActual.nombre + "<-";
+                            Console.Write(DestinoActual.nombre);
+                            Console.Write("<-");
+                            while (pila.Count > 0 && pila.Peek().first != DestinoActual)
+                            {
+                                pila.Pop();
+                            }
+                            if (pila.Count > 0)
+                            {
+                                DestinoActual = pila.Peek().first;
+                            }
+                        }
+                        break;
+                    }
+                    aux = VerticeActual.ady;
+                    while (aux != null)
+                    {
+                        band = 0;
+                        CostoActual = CostoActual + aux.peso;
+                        for (i = ListaCostos.GetEnumerator(); i.MoveNext();)
+                        {
+                            if (aux.ady == i.Current.first)
+                            {
+                                band = 1;
+                                if (CostoActual < i.Current.second)
+                                {                                    
+                                    i.Current.second = CostoActual;
+                                    for (j = ListaOrdenada.GetEnumerator(); j.MoveNext();)
+                                    {
+                                        if (j.Current.first == aux.ady)
+                                        {
+                                            j.Current.second = CostoActual;
+                                        }
+                                    }
+                                    pila.Push(new Pair<Vertice, Vertice>(VerticeActual, aux.ady));
+                                    CostoActual = CostoActual - aux.peso;
+                                }
+                            }
+                        }
+                        if (band == 0)
+                        {
+                            ListaCostos.Add(new Pair<Vertice, int>(aux.ady, CostoActual));
+                            ListaOrdenada.Add(new Pair<Vertice, int>(aux.ady, CostoActual));
+                            pila.Push(new Pair<Vertice, Vertice>(VerticeActual, aux.ady));
+                            CostoActual = CostoActual - aux.peso;
+                        }
+                        aux = aux.sig;
+                    }
+                }
+                if (band2 == 0)
+                {
+                    Console.Write("No hay una ruta entre esos dos vertices");
+                    Console.Write("\n");
+                }
+                MessageBox.Show(mejorRuta);
             }
             public class Pair<T, U>
             {
