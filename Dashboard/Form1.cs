@@ -60,13 +60,12 @@ namespace Dashboard
             G.InsertaVertice("PUERTO CORTES", "15.8312096,-87.9440977");
             G.InsertaVertice("COLON", "15.7780954,-87.6584023");
             G.InsertaVertice("CHOLOMA", "15.5953142,-87.9908587");
-            G.InsertaVertice("LA LIMA", "15.4369242,-87.9291202");
 
             //Aristas pre-cargadas
-            InsertarAristaEnGrafo("SPS", "VILLANUEVA", 5);
-            InsertarAristaEnGrafo("SPS", "PROGRESO", 6);
-            InsertarAristaEnGrafo("PROGRESO", "TGU", 3);
-            InsertarAristaEnGrafo("VILLANUEVA", "TGU", 3);
+            InsertarAristaEnGrafo("SPS", "VILLANUEVA", 500);
+            InsertarAristaEnGrafo("SPS", "PROGRESO", 600);
+            InsertarAristaEnGrafo("VILLANUEVA", "TGU", 300);
+            InsertarAristaEnGrafo("PROGRESO", "TGU", 300);
 
             //Actualizar mapa
             ActualizarMapa();
@@ -406,7 +405,9 @@ namespace Dashboard
                 {
                     VerticeActual = ListaOrdenada.First().first;
                     CostoActual = ListaOrdenada.First().second;
-                    ListaOrdenada.RemoveAt(0);
+
+                    ListaOrdenada.RemoveAll(x=> x.first == VerticeActual && x.second == CostoActual);
+
                     if (VerticeActual == destino)
                     {
                         band2 = 1;
@@ -416,15 +417,17 @@ namespace Dashboard
                             mejorRuta += DestinoActual.nombre + "<-";
                             Console.Write(DestinoActual.nombre);
                             Console.Write("<-");
-                            while (pila.Count > 0 && pila.Peek().first != DestinoActual)
-                            {
-                                pila.Pop();
-                            }
+                            //while (pila.Count > 0 && pila.Peek().first != DestinoActual)
+                            //{
+                            //    
+                            //}
                             if (pila.Count > 0)
                             {
                                 DestinoActual = pila.Peek().first;
                             }
+                            pila.Pop();
                         }
+                        mejorRuta += origen.nombre;
                         break;
                     }
                     aux = VerticeActual.ady;
@@ -456,7 +459,17 @@ namespace Dashboard
                         {
                             ListaCostos.Add(new Pair<Vertice, int>(aux.ady, CostoActual));
                             ListaOrdenada.Add(new Pair<Vertice, int>(aux.ady, CostoActual));
-                            pila.Push(new Pair<Vertice, Vertice>(VerticeActual, aux.ady));
+                            if (pila.Count() == 0)
+                            {
+                                pila.Push(new Pair<Vertice, Vertice>(VerticeActual, aux.ady));
+                            }
+                            else 
+                            {
+                                if (VerticeActual != pila.Last().first)
+                                {
+                                    pila.Push(new Pair<Vertice, Vertice>(VerticeActual, aux.ady));
+                                }
+                            }  
                             CostoActual = CostoActual - aux.peso;
                         }
                         aux = aux.sig;
