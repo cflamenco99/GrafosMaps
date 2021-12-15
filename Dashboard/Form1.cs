@@ -62,8 +62,8 @@ namespace Dashboard
             G.InsertaVertice("CHOLOMA", "15.5953142,-87.9908587");
 
             //Aristas pre-cargadas
-            InsertarAristaEnGrafo("SPS", "VILLANUEVA", 500);
-            InsertarAristaEnGrafo("SPS", "PROGRESO", 600);
+            InsertarAristaEnGrafo("SPS", "VILLANUEVA", 600);
+            InsertarAristaEnGrafo("SPS", "PROGRESO", 500);
             InsertarAristaEnGrafo("VILLANUEVA", "TGU", 300);
             InsertarAristaEnGrafo("PROGRESO", "TGU", 300);
 
@@ -397,8 +397,9 @@ namespace Dashboard
                 List<Pair<Vertice, int>> ListaCostos = new List<Pair<Vertice, int>>();
                 List<Pair<Vertice, int>> ListaOrdenada = new List<Pair<Vertice, int>>();
                 Stack<Pair<Vertice, Vertice>> pila = new Stack<Pair<Vertice, Vertice>>();
-                List<Pair<Vertice, int>>.Enumerator i,j;
-                ListaCostos.Add(new Pair<Vertice,int>(origen,0));
+                List<Pair<Vertice, int>>.Enumerator i, j;
+
+                ListaCostos.Add(new Pair<Vertice, int>(origen, 0));
                 ListaOrdenada.Add(new Pair<Vertice, int>(origen, 0));
 
                 while (ListaOrdenada.Count > 0)
@@ -406,7 +407,7 @@ namespace Dashboard
                     VerticeActual = ListaOrdenada.First().first;
                     CostoActual = ListaOrdenada.First().second;
 
-                    ListaOrdenada.RemoveAll(x=> x.first == VerticeActual && x.second == CostoActual);
+                    ListaOrdenada.RemoveAt(0);
 
                     if (VerticeActual == destino)
                     {
@@ -417,17 +418,15 @@ namespace Dashboard
                             mejorRuta += DestinoActual.nombre + "<-";
                             Console.Write(DestinoActual.nombre);
                             Console.Write("<-");
-                            //while (pila.Count > 0 && pila.Peek().first != DestinoActual)
-                            //{
-                            //    
-                            //}
+                            while (pila.Count > 0 && pila.Peek().second != DestinoActual)
+                            {
+                                pila.Pop();
+                            }
                             if (pila.Count > 0)
                             {
                                 DestinoActual = pila.Peek().first;
                             }
-                            pila.Pop();
                         }
-                        mejorRuta += origen.nombre;
                         break;
                     }
                     aux = VerticeActual.ady;
@@ -441,7 +440,7 @@ namespace Dashboard
                             {
                                 band = 1;
                                 if (CostoActual < i.Current.second)
-                                {                                    
+                                {
                                     i.Current.second = CostoActual;
                                     for (j = ListaOrdenada.GetEnumerator(); j.MoveNext();)
                                     {
@@ -459,17 +458,7 @@ namespace Dashboard
                         {
                             ListaCostos.Add(new Pair<Vertice, int>(aux.ady, CostoActual));
                             ListaOrdenada.Add(new Pair<Vertice, int>(aux.ady, CostoActual));
-                            if (pila.Count() == 0)
-                            {
-                                pila.Push(new Pair<Vertice, Vertice>(VerticeActual, aux.ady));
-                            }
-                            else 
-                            {
-                                if (VerticeActual != pila.Last().first)
-                                {
-                                    pila.Push(new Pair<Vertice, Vertice>(VerticeActual, aux.ady));
-                                }
-                            }  
+                            pila.Push(new Pair<Vertice, Vertice>(VerticeActual, aux.ady));
                             CostoActual = CostoActual - aux.peso;
                         }
                         aux = aux.sig;
