@@ -27,6 +27,7 @@ namespace Dashboard
         Grafo G = new Grafo();
         public List<Vertice> ciudadesList = new List<Vertice>();
         public List<Rutas> rutasList = new List<Rutas>();
+        public string KeyMejorRuta = "";
 
         public Form1()
         {
@@ -56,10 +57,10 @@ namespace Dashboard
             G.InsertaVertice("PROGRESO", "15.4156355,-87.8642911");
             G.InsertaVertice("TGU", "14.0839962,-87.2399922");
             G.InsertaVertice("TELA", "15.7716615,-87.5342203");
-
             G.InsertaVertice("PUERTO CORTES", "15.8312096,-87.9440977");
             G.InsertaVertice("COLON", "15.7780954,-87.6584023");
             G.InsertaVertice("CHOLOMA", "15.5953142,-87.9908587");
+            G.InsertaVertice("LA CEIBA", "15.7605292,-86.8434804");
 
             //Aristas pre-cargadas
             InsertarAristaEnGrafo("SPS", "VILLANUEVA", 600);
@@ -147,7 +148,13 @@ namespace Dashboard
         {
             string nombreCiudadOrigen = cmbCiudadOrigen.Text;
             string nombreCiudadDestino = cmbCiudadDestino.Text;
-            G.PrimeroMejor(G.GetVertice(nombreCiudadOrigen), G.GetVertice(nombreCiudadDestino));
+            G.PrimeroMejor(G.GetVertice(nombreCiudadOrigen), G.GetVertice(nombreCiudadDestino), out string mejorRuta);
+            List<string> vertices = new List<string>();
+            for (int i = 0; i < mejorRuta.Split('-').Length - 1; i++)
+            {
+                vertices.Add(mejorRuta.Split('-')[i]);
+            }
+            DiferenciarMejorRuta(vertices);
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -268,6 +275,26 @@ namespace Dashboard
             gMapControl1.Zoom = gMapControl1.Zoom + 1;
             gMapControl1.Zoom = gMapControl1.Zoom - 1;
         }
+        public void DiferenciarMejorRuta(List<string> vertices)
+        {
+            double lng, lat;
+            List<PointLatLng> puntos = new List<PointLatLng>();
+            foreach (var ciudad in vertices)
+            {
+                KeyMejorRuta += ciudad + "-";
+                Vertice ciudadActual = G.GetVertice(ciudad);
+                lat = Convert.ToDouble(ciudadActual.coordenada.Split(',')[0]);
+                lng = Convert.ToDouble(ciudadActual.coordenada.Split(',')[1]);
+                puntos.Add(new PointLatLng(lat, lng));
+            }
+            
+            GMapOverlay Ruta = new GMapOverlay(KeyMejorRuta);         
+            GMapRoute PuntosRuta = new GMapRoute(puntos, KeyMejorRuta);
+            Ruta.Routes.Add(PuntosRuta);
+            gMapControl1.Overlays.Add(Ruta);
+            gMapControl1.Zoom = gMapControl1.Zoom + 1;
+            gMapControl1.Zoom = gMapControl1.Zoom - 1;
+        }        
         public class Rutas 
         {
             public Rutas(Vertice origen, Vertice destino, int precio)
@@ -388,9 +415,9 @@ namespace Dashboard
                 }
                 return total;                    
             }
-            public void PrimeroMejor(Vertice origen, Vertice destino)
+            public void PrimeroMejor(Vertice origen, Vertice destino, out string mejorRuta)
             {
-                string mejorRuta = "";
+                mejorRuta = "";
                 int CostoActual, band, band2 = 0;
                 Vertice VerticeActual, DestinoActual;
                 Arista aux;
@@ -415,7 +442,7 @@ namespace Dashboard
                         DestinoActual = destino;
                         while (pila.Count > 0)
                         {
-                            mejorRuta += DestinoActual.nombre + "<-";
+                            mejorRuta += DestinoActual.nombre + "-";
                             Console.Write(DestinoActual.nombre);
                             Console.Write("<-");
                             while (pila.Count > 0 && pila.Peek().second != DestinoActual)
